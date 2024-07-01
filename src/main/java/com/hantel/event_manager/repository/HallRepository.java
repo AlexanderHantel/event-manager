@@ -10,8 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class HallRepository {
 
-
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     @Autowired
     public HallRepository(EntityManager entityManager) {
