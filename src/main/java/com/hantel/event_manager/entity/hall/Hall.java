@@ -24,7 +24,7 @@ public class Hall {
     private String name;
 
     @OneToMany(mappedBy = "hall")
-    private List<Row> rows = new ArrayList<>();
+    private List<Line> lines = new ArrayList<>();
 
     @OneToOne(mappedBy = "hall")
     private Concert concert;

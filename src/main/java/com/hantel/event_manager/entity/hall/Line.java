@@ -1,9 +1,6 @@
 package com.hantel.event_manager.entity.hall;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,12 +13,13 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Row {
+public class Line {
 
     @Id
+    @Column(name = "number")
     private Long number;
 
-    @OneToMany(mappedBy = "row")
+    @OneToMany(mappedBy = "line")
     private List<Seat> seats;
 
     @ManyToOne
