@@ -7,7 +7,7 @@ INSERT INTO line (number, hall_id) VALUES
                                       (4, 1),
                                       (5, 1);
 
--- Create seats for Row 1
+-- Create seats for Line 1
 INSERT INTO seat (id, number, line_number, is_free) VALUES
                                                    (1, 1, 1, true),
                                                    (2, 2, 1, true),
@@ -20,7 +20,7 @@ INSERT INTO seat (id, number, line_number, is_free) VALUES
                                                    (9, 9, 1, true),
                                                    (10, 10, 1, true);
 
--- Create seats for Row 2
+-- Create seats for Line 2
 INSERT INTO seat (id, number, line_number, is_free) VALUES
                                                    (11, 1, 2, true),
                                                    (12, 2, 2, true),
@@ -33,7 +33,7 @@ INSERT INTO seat (id, number, line_number, is_free) VALUES
                                                    (19, 9, 2, true),
                                                    (20, 10, 2, true);
 
--- Create seats for Row 3
+-- Create seats for Line 3
 INSERT INTO seat (id, number, line_number, is_free) VALUES
                                                    (21, 1, 3, true),
                                                    (22, 2, 3, false), -- booked
@@ -48,7 +48,7 @@ INSERT INTO seat (id, number, line_number, is_free) VALUES
                                                    (31, 11, 3, true),
                                                    (32, 12, 3, true);
 
--- Create seats for Row 4
+-- Create seats for Line 4
 INSERT INTO seat (id, number, line_number, is_free) VALUES
                                                    (33, 1, 4, true),
                                                    (34, 2, 4, true),
@@ -63,7 +63,7 @@ INSERT INTO seat (id, number, line_number, is_free) VALUES
                                                    (43, 11, 4, true),
                                                    (44, 12, 4, true);
 
--- Create seats for Row 5
+-- Create seats for Line 5
 INSERT INTO seat (id, number, line_number, is_free) VALUES
                                                    (45, 1, 5, true),
                                                    (46, 2, 5, true),

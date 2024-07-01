@@ -12,4 +12,6 @@ public class HallService {
     public HallService(HallRepository hallRepository) {
         this.hallRepository = hallRepository;
     }
+
+
 }

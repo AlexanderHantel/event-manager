@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Setter
@@ -27,4 +29,7 @@ public class Concert {
 
     @ManyToOne
     private Musical musical;
+
+    @OneToMany(mappedBy = "concert")
+    private List<Ticket> tickets = new ArrayList<>();
 }
