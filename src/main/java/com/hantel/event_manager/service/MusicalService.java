@@ -16,7 +16,7 @@ public class MusicalService {
         this.musicalRepository = musicalRepository;
     }
 
-    public Musical findById(int id) {
+    public Musical findById(Long id) {
         return musicalRepository.findById(id);
     }
 

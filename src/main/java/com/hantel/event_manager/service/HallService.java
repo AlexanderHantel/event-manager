@@ -38,5 +38,11 @@ public class HallService {
         return hallString.toString();
     }
 
+    public List<Hall> findAll() {
+        return hallRepository.findAll();
+    }
 
+    public Hall findById(Long id) {
+        return hallRepository.findById(id);
+    }
 }

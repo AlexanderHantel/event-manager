@@ -13,7 +13,7 @@ import java.util.List;
 @Transactional
 public class ConcertRepository {
     private final EntityManager entityManager;
-    public static final String FIND_ALL = "select c from Concert c";
+    public static final String FIND_ALL = "from Concert";
     public static final String FIND_ALL_BY_MUSICAL_ID = "select c from Concert c where c.musicalId=:musicalId";
 
     @Autowired
@@ -27,7 +27,10 @@ public class ConcertRepository {
     }
 
     public List<Concert> findAll() {
-        TypedQuery<Concert> namedQuery = entityManager.createQuery(FIND_ALL, Concert.class);
-        return namedQuery.getResultList();
+        return entityManager.createQuery(FIND_ALL, Concert.class).getResultList();
+    }
+
+    public void save(Concert concert){
+        entityManager.persist(concert);
     }
 }

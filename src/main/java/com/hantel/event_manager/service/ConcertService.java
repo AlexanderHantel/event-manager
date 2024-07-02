@@ -30,4 +30,8 @@ public class ConcertService {
                 .map(LocalDate::toString)
                 .collect(Collectors.toList());
     }
+
+    public void save(Concert concert){
+        concertRepository.save(concert);
+    }
 }
