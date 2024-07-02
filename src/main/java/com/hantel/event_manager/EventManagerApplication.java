@@ -1,5 +1,6 @@
 package com.hantel.event_manager;
 
+import com.hantel.event_manager.service.ConcertService;
 import com.hantel.event_manager.service.HallService;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -14,10 +15,12 @@ public class EventManagerApplication implements CommandLineRunner {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(EventManagerApplication.class);
 	private final HallService hallService;
+	private final ConcertService concertService;
 
 	@Autowired
-	public EventManagerApplication(HallService hallService) {
+	public EventManagerApplication(HallService hallService, ConcertService concertService) {
 		this.hallService = hallService;
+		this.concertService = concertService;
 	}
 
 	public static void main(String[] args) {
@@ -27,7 +30,7 @@ public class EventManagerApplication implements CommandLineRunner {
 	@Override
 	@Transactional
 	public void run(String... args) throws Exception {
-		String hallString = hallService.createHallString();
-		LOGGER.info("{}", hallString);
+//		List<String> reservedDatesAsStrings = concertService.getReservedDatesAsStrings();
+//		LOGGER.info("reserved dates: {}", reservedDatesAsStrings);
 	}
 }

@@ -79,3 +79,10 @@ INSERT INTO seat (id, number, line_number, is_free) VALUES
                                                    (56, 12, 5, true),
                                                    (57, 13, 5, true),
                                                    (58, 14, 5, true);
+
+INSERT INTO concert (id, start_date_time) VALUES
+                                              (1, '2024-07-05 10:17:14'),
+                                              (2, '2024-07-07 10:17:14'),
+                                              (3, '2024-07-09 10:17:14'),
+                                              (4, '2024-07-11 10:17:14'),
+                                              (5, '2024-07-13 10:17:14');

@@ -13,7 +13,8 @@ import java.util.List;
 @Transactional
 public class ConcertRepository {
     private final EntityManager entityManager;
-    public static final String FIND_ALL_BY_MUSICAL_ID = "select m from Concert m where m.musicalId=:musicalId";
+    public static final String FIND_ALL = "select c from Concert c";
+    public static final String FIND_ALL_BY_MUSICAL_ID = "select c from Concert c where c.musicalId=:musicalId";
 
     @Autowired
     public ConcertRepository(EntityManager entityManager) {
@@ -22,6 +23,11 @@ public class ConcertRepository {
 
     public List<Concert> findAllByMusicalId(Long musicalId) {
         TypedQuery<Concert> namedQuery = entityManager.createQuery(FIND_ALL_BY_MUSICAL_ID, Concert.class);
+        return namedQuery.getResultList();
+    }
+
+    public List<Concert> findAll() {
+        TypedQuery<Concert> namedQuery = entityManager.createQuery(FIND_ALL, Concert.class);
         return namedQuery.getResultList();
     }
 }

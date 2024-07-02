@@ -2,11 +2,15 @@ package com.hantel.event_manager.controller;
 
 import com.hantel.event_manager.entity.Concert;
 import com.hantel.event_manager.entity.Musical;
+import com.hantel.event_manager.service.ConcertService;
 import com.hantel.event_manager.service.MusicalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,10 +20,12 @@ import java.util.List;
 @RequestMapping("manager")
 public class EventManagementController {
     private final MusicalService musicalService;
+    private final ConcertService concertService;
 
     @Autowired
-    public EventManagementController(MusicalService musicalService) {
+    public EventManagementController(MusicalService musicalService, ConcertService concertService) {
         this.musicalService = musicalService;
+        this.concertService = concertService;
     }
 
     @GetMapping("/")
@@ -38,6 +44,7 @@ public class EventManagementController {
 
         model.addAttribute("name", name);
         model.addAttribute("price", price);
+        model.addAttribute("reservedDates", concertService.getReservedDatesAsStrings());
 
         return "manager/create-concert";
 
