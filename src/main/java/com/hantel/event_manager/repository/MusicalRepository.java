@@ -28,4 +28,8 @@ public class MusicalRepository {
         TypedQuery<Musical> namedQuery = entityManager.createQuery(FIND_ALL, Musical.class);
         return namedQuery.getResultList();
     }
+
+    public void save(Musical musical) {
+        entityManager.persist(musical);
+    }
 }
