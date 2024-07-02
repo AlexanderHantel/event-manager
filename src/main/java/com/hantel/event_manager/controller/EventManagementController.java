@@ -17,11 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @Controller
@@ -96,7 +92,7 @@ public class EventManagementController {
         Concert concert = new Concert();
         concert.setMusical(musical);
         concert.setHall(hall);
-        concert.setStartDateTime(parseDateTime(date, time));
+        concert.setStartDateTime(LocalDateTime.parse(date + "T" + time));
 
         concertService.save(concert);
 
@@ -107,23 +103,5 @@ public class EventManagementController {
         model.addAttribute("price", concert.getMusical().getPrice());
 
         return "manager/create-concert-success";
-    }
-
-    private LocalDateTime parseDateTime(String date, String time) {
-        LocalDateTime localDateTime;
-
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-
-        try {
-            LocalDate localDate = LocalDate.parse(date, dateFormatter);
-            LocalTime localTime = LocalTime.parse(time, timeFormatter);
-            localDateTime = LocalDateTime.of(localDate, localTime);
-        } catch (DateTimeParseException e) {
-            System.err.println("LocalDateTime parse exception: " + e.getMessage());
-            throw new RuntimeException("LocalDateTime parse exception: " + e.getMessage());
-        }
-
-        return localDateTime;
     }
 }
