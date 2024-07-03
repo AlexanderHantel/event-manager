@@ -34,4 +34,8 @@ public class ConcertService {
     public void save(Concert concert){
         concertRepository.save(concert);
     }
+
+    public List<Concert> findAllByMusicalId(Long musicalId) {
+        return concertRepository.findAllByMusicalId(musicalId);
+    }
 }

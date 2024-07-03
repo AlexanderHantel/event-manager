@@ -14,7 +14,7 @@ import java.util.List;
 public class ConcertRepository {
     private final EntityManager entityManager;
     public static final String FIND_ALL = "from Concert";
-    public static final String FIND_ALL_BY_MUSICAL_ID = "select c from Concert c where c.musicalId=:musicalId";
+    public static final String FIND_ALL_BY_MUSICAL_ID = "select c from Concert c where c.musical.id = :musicalId";
 
     @Autowired
     public ConcertRepository(EntityManager entityManager) {
@@ -22,7 +22,8 @@ public class ConcertRepository {
     }
 
     public List<Concert> findAllByMusicalId(Long musicalId) {
-        TypedQuery<Concert> namedQuery = entityManager.createQuery(FIND_ALL_BY_MUSICAL_ID, Concert.class);
+        TypedQuery<Concert> namedQuery = entityManager.createQuery(FIND_ALL_BY_MUSICAL_ID, Concert.class)
+                .setParameter("musicalId", musicalId);
         return namedQuery.getResultList();
     }
 

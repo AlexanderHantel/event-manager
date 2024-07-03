@@ -19,19 +19,24 @@
 <body>
     <h1>Musical Manager:</h1>
     <div class="button-container">
-        <form th:action="@{/manager/newMusical}" method="get">
-            <div>
-                <button type="submit">NEW MUSICAL</button>
-            </div>
-        </form>
+<!--        <form th:action="@{/manager/newMusical}" method="get">-->
+<!--            <div>-->
+<!--                <button type="submit">NEW MUSICAL</button>-->
+<!--            </div>-->
+<!--        </form>-->
         <form th:action="@{/manager/newHairsprayConcert}" method="get">
             <div>
-                <button type="submit">NEW CONCERT FOR HAIRSPRAY MUSICAL</button>
+                <button type="submit">NEW CONCERT</button>
+            </div>
+        </form>
+        <form th:action="@{/manager/overviewHairsprayConcerts}" method="get">
+            <div>
+                <button type="submit">OVERVIEW</button>
             </div>
         </form>
         <form th:action="@{/}" method="get">
             <div>
-                <button type="submit">EXIT TO MAIN MENU</button>
+                <button type="submit">HOME</button>
             </div>
         </form>
     </div>

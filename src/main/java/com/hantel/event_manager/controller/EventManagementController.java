@@ -1,8 +1,10 @@
 package com.hantel.event_manager.controller;
 
+import com.hantel.event_manager.dto.ConcertWithVacantSeatsDTO;
 import com.hantel.event_manager.entity.Concert;
 import com.hantel.event_manager.entity.Musical;
 import com.hantel.event_manager.entity.hall.Hall;
+import com.hantel.event_manager.service.BookingService;
 import com.hantel.event_manager.service.ConcertService;
 import com.hantel.event_manager.service.HallService;
 import com.hantel.event_manager.service.MusicalService;
@@ -26,14 +28,16 @@ public class EventManagementController {
     private final ConcertService concertService;
     private final HallService hallService;
     public static final Long HAIRSPRAY_MUSICAL_ID = 1L;
+    private final BookingService bookingService;
 
     @Autowired
     public EventManagementController(MusicalService musicalService,
                                      ConcertService concertService,
-                                     HallService hallService) {
+                                     HallService hallService, BookingService bookingService) {
         this.musicalService = musicalService;
         this.concertService = concertService;
         this.hallService = hallService;
+        this.bookingService = bookingService;
     }
 
     @GetMapping
@@ -126,8 +130,17 @@ public class EventManagementController {
         return "manager/create-concert-success";
     }
 
-    @GetMapping("/vacantSeats")
+    @GetMapping("/overviewHairsprayConcerts")
     public String showAllHairsprayConcerts(Model model) {
-        return "";
+        List<Concert> hairsprayConcerts = concertService.findAllByMusicalId(HAIRSPRAY_MUSICAL_ID);
+        List<ConcertWithVacantSeatsDTO> concertWithVacantSeatsDTOList = hairsprayConcerts
+                .stream().map(concert -> new ConcertWithVacantSeatsDTO(
+                        concert.getStartDateTime().toLocalDate().toString(),
+                        concert.getStartDateTime().toLocalTime().toString(),
+                        bookingService.getVacantSeatsAmount(concert.getId(), concert.getHall().getId()))).toList();
+
+        model.addAttribute("concerts", concertWithVacantSeatsDTOList);
+
+        return "/manager/overview-hairspray-concerts";
     }
 }
