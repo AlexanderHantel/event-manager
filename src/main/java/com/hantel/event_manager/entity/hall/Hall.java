@@ -18,7 +18,7 @@ import java.util.List;
 public class Hall {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -26,6 +26,9 @@ public class Hall {
     @OneToMany(mappedBy = "hall")
     private List<Line> lines = new ArrayList<>();
 
-    @OneToOne(mappedBy = "hall")
-    private Concert concert;
+    @OneToMany(mappedBy = "hall")
+    private List<BookedSeat> hallOccupancies = new ArrayList<>();
+
+    @OneToMany(mappedBy = "hall")
+    private List<Concert> concerts = new ArrayList<>();
 }

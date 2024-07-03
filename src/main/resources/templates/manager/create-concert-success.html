@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Concert is created</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap">
+    <style>
+        body {
+            font-family: 'Source Code Pro', monospace;
+        }
+    </style>
 </head>
 <body>
     <h1>Concert is created:</h1>
@@ -11,5 +17,10 @@
     <p>Time: <span th:text="${time}"></span></p>
     <p>Hall: <span th:text="${hall}"></span></p>
     <p>Price: <span th:text="${price}"></span></p>
+    <form th:action="@{/}" method="get">
+        <div>
+            <button type="submit">EXIT TO MAIN MENU</button>
+        </div>
+    </form>
 </body>
 </html>

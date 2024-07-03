@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manager menu</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap">
+    <style>
+        body {
+            font-family: 'Source Code Pro', monospace;
+        }
+        .button-container form {
+            margin-bottom: 10px;
+        }
+        .button-container form:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Musical Manager:</h1>
+    <div class="button-container">
+        <form th:action="@{/manager/newMusical}" method="get">
+            <div>
+                <button type="submit">NEW MUSICAL</button>
+            </div>
+        </form>
+        <form th:action="@{/manager/newHairsprayConcert}" method="get">
+            <div>
+                <button type="submit">NEW CONCERT FOR HAIRSPRAY MUSICAL</button>
+            </div>
+        </form>
+        <form th:action="@{/}" method="get">
+            <div>
+                <button type="submit">EXIT TO MAIN MENU</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

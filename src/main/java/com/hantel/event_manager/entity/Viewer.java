@@ -1,10 +1,13 @@
 package com.hantel.event_manager.entity;
 
+import com.hantel.event_manager.entity.hall.BookedSeat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Setter
@@ -14,13 +17,13 @@ import lombok.Setter;
 public class Viewer {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
     private String phoneNumber;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private Ticket ticket;
+    @OneToMany(mappedBy = "viewer")
+    private List<BookedSeat> bookedSeats;
 }

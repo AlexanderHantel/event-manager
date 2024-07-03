@@ -7,7 +7,6 @@ import com.hantel.event_manager.service.ConcertService;
 import com.hantel.event_manager.service.HallService;
 import com.hantel.event_manager.service.MusicalService;
 import jakarta.servlet.http.HttpSession;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,11 +22,10 @@ import java.util.List;
 @Controller
 @RequestMapping("manager")
 public class EventManagementController {
-    public static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EventManagementController.class);
-
     private final MusicalService musicalService;
     private final ConcertService concertService;
     private final HallService hallService;
+    public static final Long HAIRSPRAY_MUSICAL_ID = 1L;
 
     @Autowired
     public EventManagementController(MusicalService musicalService,
@@ -38,7 +36,12 @@ public class EventManagementController {
         this.hallService = hallService;
     }
 
-    @GetMapping("/")
+    @GetMapping
+    public String showManagerMenu() {
+        return "/manager/menu";
+    }
+
+    @GetMapping("/newMusical")
     public String showMusicalForm(Model model) {
         return "manager/new-musical-form";
     }
@@ -63,10 +66,28 @@ public class EventManagementController {
         session.setAttribute("halls", halls);
         session.setAttribute("reservedDates", reservedDates);
 
-        return "redirect:/manager/showConcertForm";
+        return "redirect:/manager/newConcert";
     }
 
-    @GetMapping("/showConcertForm")
+    @GetMapping("/newHairsprayConcert")
+    public String showHairsprayConcertForm(RedirectAttributes redirectAttributes,
+                                           HttpSession session) {
+        Musical hairsprayMusical = musicalService.findById(HAIRSPRAY_MUSICAL_ID);
+
+        List<Hall> halls = hallService.findAll();
+        List<String> reservedDates = concertService.getReservedDatesAsStrings();
+
+        redirectAttributes.addAttribute("musicalId", hairsprayMusical.getId());
+        redirectAttributes.addAttribute("name", hairsprayMusical.getName());
+        redirectAttributes.addAttribute("price", hairsprayMusical.getPrice());
+
+        session.setAttribute("halls", halls);
+        session.setAttribute("reservedDates", reservedDates);
+
+        return "redirect:/manager/newConcert";
+    }
+
+    @GetMapping("/newConcert")
     public String showConcertForm(@RequestParam("musicalId") Long musicalId,
                                   @RequestParam("name") String name,
                                   @RequestParam("price") Double price,
@@ -103,5 +124,10 @@ public class EventManagementController {
         model.addAttribute("price", concert.getMusical().getPrice());
 
         return "manager/create-concert-success";
+    }
+
+    @GetMapping("/vacantSeats")
+    public String showAllHairsprayConcerts(Model model) {
+        return "";
     }
 }

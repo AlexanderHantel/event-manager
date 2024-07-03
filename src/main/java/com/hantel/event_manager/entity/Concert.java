@@ -1,5 +1,6 @@
 package com.hantel.event_manager.entity;
 
+import com.hantel.event_manager.entity.hall.BookedSeat;
 import com.hantel.event_manager.entity.hall.Hall;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,12 +25,12 @@ public class Concert {
 
     private LocalDateTime startDateTime;
 
-    @OneToOne
-    private Hall hall;
-
     @ManyToOne
     private Musical musical;
 
+    @ManyToOne
+    private Hall hall;
+
     @OneToMany(mappedBy = "concert")
-    private List<Ticket> tickets = new ArrayList<>();
+    private List<BookedSeat> bookedSeats = new ArrayList<>();
 }

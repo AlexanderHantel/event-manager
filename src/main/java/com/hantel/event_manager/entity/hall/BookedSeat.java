@@ -1,31 +1,33 @@
 package com.hantel.event_manager.entity.hall;
 
+import com.hantel.event_manager.entity.Concert;
+import com.hantel.event_manager.entity.Viewer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Entity
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Line {
-
+public class BookedSeat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int ordinalNumber;
-
-    private int seatsPerLine;
-
     @ManyToOne
     private Hall hall;
 
-    @OneToMany(mappedBy = "line")
-    private List<BookedSeat> bookedSeat;
+    @ManyToOne
+    private Concert concert;
+
+    @ManyToOne
+    private Line line;
+    private int seatOrdinalNumber;
+
+    @ManyToOne
+    private Viewer viewer;
 }
