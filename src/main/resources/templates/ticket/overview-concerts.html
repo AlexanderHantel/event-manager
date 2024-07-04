@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hairspray concerts</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap">
+    <style>
+        body {
+            font-family: 'Source Code Pro', monospace;
+        }
+        .concert-container {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+        }
+    </style>
+    </head>
+<body>
+    <h1>Hairspray Concerts</h1>
+        <div th:each="concert : ${concerts}" class="concert-container">
+            <p><strong>Name:</strong> <span th:text="${concert.name}"></span></p>
+            <p><strong>Date:</strong> <span th:text="${concert.date}"></span></p>
+            <p><strong>Time:</strong> <span th:text="${concert.time}"></span></p>
+            <p><strong>Vacant Seats:</strong> <span th:text="${concert.vacantSeatsAmount}"></span></p>
+            <form th:action="@{/ticket/bookingForm}" method="get">
+                <div>
+                    <input type="hidden" th:value="${concert.concertId}" name="concertId" />
+                    <button type="submit">CHOOSE</button>
+                </div>
+            </form>
+        </div>
+    <form th:action="@{/}" method="get">
+        <div>
+            <button type="submit">HOME</button>
+        </div>
+    </form>
+</body>
+</html>

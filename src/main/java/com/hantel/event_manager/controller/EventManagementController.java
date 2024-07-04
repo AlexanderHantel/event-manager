@@ -1,6 +1,6 @@
 package com.hantel.event_manager.controller;
 
-import com.hantel.event_manager.dto.ConcertWithVacantSeatsDTO;
+import com.hantel.event_manager.dto.ConcertEventManagementControllerDTO;
 import com.hantel.event_manager.entity.Concert;
 import com.hantel.event_manager.entity.Musical;
 import com.hantel.event_manager.entity.hall.Hall;
@@ -133,13 +133,13 @@ public class EventManagementController {
     @GetMapping("/overviewHairsprayConcerts")
     public String showAllHairsprayConcerts(Model model) {
         List<Concert> hairsprayConcerts = concertService.findAllByMusicalId(HAIRSPRAY_MUSICAL_ID);
-        List<ConcertWithVacantSeatsDTO> concertWithVacantSeatsDTOList = hairsprayConcerts
-                .stream().map(concert -> new ConcertWithVacantSeatsDTO(
+        List<ConcertEventManagementControllerDTO> concertEventManagementControllerDTOList = hairsprayConcerts
+                .stream().map(concert -> new ConcertEventManagementControllerDTO(
                         concert.getStartDateTime().toLocalDate().toString(),
                         concert.getStartDateTime().toLocalTime().toString(),
                         bookingService.getVacantSeatsAmount(concert.getId(), concert.getHall().getId()))).toList();
 
-        model.addAttribute("concerts", concertWithVacantSeatsDTOList);
+        model.addAttribute("concerts", concertEventManagementControllerDTOList);
 
         return "/manager/overview-hairspray-concerts";
     }

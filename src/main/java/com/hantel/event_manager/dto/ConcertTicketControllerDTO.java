@@ -9,8 +9,10 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConcertWithVacantSeatsDTO {
+public class ConcertTicketControllerDTO {
+    private Long concertId;
+    private String name;
     private String date;
     private String time;
-    private int vacantSeatsAmount;
+    private String vacantSeatsAmount;
 }

@@ -38,4 +38,8 @@ public class ConcertService {
     public List<Concert> findAllByMusicalId(Long musicalId) {
         return concertRepository.findAllByMusicalId(musicalId);
     }
+
+    public Concert findById(Long id) {
+        return concertRepository.findById(id);
+    }
 }

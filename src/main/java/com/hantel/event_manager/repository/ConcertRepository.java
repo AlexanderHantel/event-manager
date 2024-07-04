@@ -34,4 +34,8 @@ public class ConcertRepository {
     public void save(Concert concert){
         entityManager.persist(concert);
     }
+
+    public Concert findById(Long id) {
+        return entityManager.find(Concert.class, id);
+    }
 }

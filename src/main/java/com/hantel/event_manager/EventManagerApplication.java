@@ -39,5 +39,7 @@ public class EventManagerApplication implements CommandLineRunner {
 //		LOGGER.info("reserved dates: {}", reservedDatesAsStrings);
 //		int amount = bookingService.getVacantSeatsAmount(1L, 1L);
 //		LOGGER.info("AAAAAAAAAAAAAAAAAAAAAAAA VacantSeatsAmount: {}", amount);
+
+		LOGGER.info("AAAAAAAAAAAAAAAAAAAAAAAA:\n{}", bookingService.getHallOccupancy(1L, 1L));
 	}
 }
