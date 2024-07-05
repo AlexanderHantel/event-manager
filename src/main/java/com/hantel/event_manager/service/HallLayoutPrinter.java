@@ -10,14 +10,15 @@ import java.util.*;
 public class HallLayoutPrinter {
     private static final String VACANT_SEAT_SYMBOL = "--";
     private static final String BOOKED_SEAT_SYMBOL = "XX";
+    private static final String CUSTOMER_BOOKED_SEAT_SYMBOL = "Me";
 
-    public String getHallLayoutTable(List<Line> lines, Long concertId) {
+    public String getHallLayoutTable(List<Line> lines, Long concertId, List<BookedSeat> customerBookedSeats) {
         StringJoiner hallLayoutString = new StringJoiner("\n");
 
         hallLayoutString.add(createHeader(lines));
 
         for (Line line : lines) {
-            hallLayoutString.add(createRow(line, concertId));
+            hallLayoutString.add(createRow(line, concertId, customerBookedSeats));
         }
 
         return hallLayoutString.toString();
@@ -42,17 +43,21 @@ public class HallLayoutPrinter {
         return head.toString();
     }
 
-    private String createRow(Line line, Long concertId) {
+    private String createRow(Line line, Long concertId, List<BookedSeat> customerBookedSeats) {
         StringJoiner row = new StringJoiner(" ");
-        List<BookedSeat> bookedSeats = line.getBookedSeats().stream()
+        List<BookedSeat> bookedSeatsForThisLine = line.getBookedSeats().stream()
                 .filter(bookedSeat -> Objects.equals(bookedSeat.getConcert().getId(), concertId))
+                .toList();
+
+        List<BookedSeat> customerBookedSeatsForThisLine = customerBookedSeats.stream()
+                .filter(bookedSeat -> Objects.equals(bookedSeat.getLine().getId(), line.getId()))
                 .toList();
 
         row.add(createRowHeader(line.getOrdinalNumber()));
 
         int lineSize = line.getSeatsPerLine();
 
-        row.add(createSeats(lineSize, bookedSeats));
+        row.add(createSeats(lineSize, bookedSeatsForThisLine, customerBookedSeatsForThisLine));
 
         return row.toString();
     }
@@ -70,7 +75,9 @@ public class HallLayoutPrinter {
         return rowHeader.toString();
     }
 
-    private String createSeats(int lineSize, List<BookedSeat> bookedSeatsForThisRow) {
+    private String createSeats(int lineSize,
+                               List<BookedSeat> bookedSeatsForThisRow,
+                               List<BookedSeat> customerBookedSeats) {
         StringJoiner rowString = new StringJoiner(" ");
         for (int j = 1; j <= lineSize; j++) {
             int finalJ = j;
@@ -78,10 +85,18 @@ public class HallLayoutPrinter {
                     .filter(seat -> seat.getSeatOrdinalNumber() == finalJ)
                     .findFirst();
 
-            if (bookedSeat.isPresent()) {
-                rowString.add(BOOKED_SEAT_SYMBOL);
+            Optional<BookedSeat> customerBookedSeat = customerBookedSeats.stream()
+                    .filter(seat -> seat.getSeatOrdinalNumber() == finalJ)
+                    .findFirst();
+
+            if (customerBookedSeat.isPresent()) {
+                rowString.add(CUSTOMER_BOOKED_SEAT_SYMBOL);
             } else {
-                rowString.add(VACANT_SEAT_SYMBOL);
+                if (bookedSeat.isPresent()) {
+                    rowString.add(BOOKED_SEAT_SYMBOL);
+                } else {
+                    rowString.add(VACANT_SEAT_SYMBOL);
+                }
             }
         }
 

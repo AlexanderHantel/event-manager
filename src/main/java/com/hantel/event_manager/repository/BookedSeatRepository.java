@@ -35,4 +35,8 @@ public class BookedSeatRepository {
                 .setParameter("lineId", lineId);
         return typedQuery.getResultList();
     }
+
+    public BookedSeat save(BookedSeat bookedSeat) {
+        return entityManager.merge(bookedSeat);
+    }
 }

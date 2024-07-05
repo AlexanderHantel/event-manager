@@ -34,6 +34,10 @@ public class BookingService {
         this.lineRepository = lineRepository;
     }
 
+    public BookedSeat save(BookedSeat bookedSeat) {
+        return bookedSeatRepository.save(bookedSeat);
+    }
+
     public String getVacantSeatsAmount(Long concertId, Long hallId) {
         int bookedSeatsAmount = bookedSeatRepository.getBookedSeatsAmountByConcertId(concertId);
         int seatsAmount = hallRepository.getSeatsAmount(hallId);
@@ -46,8 +50,12 @@ public class BookingService {
     }
 
     public String getHallLayout(Long hallId, Long concertId) {
+        return getHallLayout(hallId, concertId, new ArrayList<>());
+    }
+
+    public String getHallLayout(Long hallId, Long concertId, List<BookedSeat> customerBookedSeats) {
         Hall hall = hallRepository.findById(hallId);
-        return hallLayoutPrinter.getHallLayoutTable(hall.getLines(), concertId);
+        return hallLayoutPrinter.getHallLayoutTable(hall.getLines(), concertId, customerBookedSeats);
     }
 
     public List<LineTicketControllerDTO> getVacantLines(Long concertId) {

@@ -1,7 +1,7 @@
 package com.hantel.event_manager.entity.hall;
 
 import com.hantel.event_manager.entity.Concert;
-import com.hantel.event_manager.entity.Viewer;
+import com.hantel.event_manager.entity.Customer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,5 +29,5 @@ public class BookedSeat {
     private int seatOrdinalNumber;
 
     @ManyToOne
-    private Viewer viewer;
+    private Customer customer;
 }

@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Viewer {
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +24,6 @@ public class Viewer {
 
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "viewer")
+    @OneToMany(mappedBy = "customer")
     private List<BookedSeat> bookedSeats;
 }

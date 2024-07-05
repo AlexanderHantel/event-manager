@@ -5,7 +5,6 @@ import com.hantel.event_manager.entity.hall.BookedSeat;
 import com.hantel.event_manager.entity.hall.Hall;
 import com.hantel.event_manager.entity.hall.Line;
 import com.hantel.event_manager.repository.BookedSeatRepository;
-import com.hantel.event_manager.repository.ConcertRepository;
 import com.hantel.event_manager.repository.HallRepository;
 import com.hantel.event_manager.repository.LineRepository;
 import org.junit.jupiter.api.Test;
@@ -41,7 +40,6 @@ class BookingServiceTest {
 
         Hall hall = new Hall();
         hall.setId(hallId);
-        Concert concert = new Concert();
 
         List<Line> lines = createLines(hall, concertId);
 
@@ -58,6 +56,48 @@ class BookingServiceTest {
                 Row  5: -- -- -- -- -- -- -- -- -- -- -- -- -- --""";
 
         assertEquals(expectedHallOccupancy, bookingService.getHallLayout(hallId, concertId));
+    }
+
+    @Test
+    public void getHallLayout_WithCustomerBookedSeats() {
+        long hallId = 1L;
+        long concertId = 1L;
+
+        Hall hall = new Hall();
+        hall.setId(hallId);
+
+        List<Line> lines = createLines(hall, concertId);
+
+        hall.setLines(lines);
+
+        when(hallRepository.findById(hallId)).thenReturn(hall);
+
+        String expectedHallOccupancy = """
+                  Seat:  1  2  3  4  5  6  7  8  9 10 11 12 13 14
+                Row  1: -- XX -- -- -- -- -- -- -- --
+                Row  2: -- Me -- -- XX XX -- -- Me --
+                Row  3: -- -- -- -- -- -- -- -- -- -- -- --
+                Row  4: -- XX -- -- -- -- -- -- -- -- -- --
+                Row  5: -- -- -- -- -- -- -- -- -- -- -- -- -- --""";
+
+        assertEquals(expectedHallOccupancy,
+                bookingService.getHallLayout(hallId, concertId, createCustomerBookedSeats()));
+    }
+
+    private List<BookedSeat> createCustomerBookedSeats() {
+        Line line = new Line();
+        line.setId(7L);
+        line.setOrdinalNumber(2);
+
+        BookedSeat bookedSeat1 = new BookedSeat();
+        bookedSeat1.setLine(line);
+        bookedSeat1.setSeatOrdinalNumber(2);
+
+        BookedSeat bookedSeat2 = new BookedSeat();
+        bookedSeat2.setLine(line);
+        bookedSeat2.setSeatOrdinalNumber(9);
+
+        return List.of(bookedSeat1, bookedSeat2);
     }
 
     private static List<Line> createLines(Hall hall, long concertId) {

@@ -21,13 +21,14 @@
     <p>Hall layout: <pre th:text="${hallLayout}"></pre>
 
     <form th:action="@{/ticket/buyTicket}" method="post">
+        <input type="hidden" th:value="${concertId}" name="concertId" />
         <div>
-            <label for="name">Customer name:</label>
-            <input type="text" id="name" name="name" required>
+            <label for="customerName">Customer name:</label>
+            <input type="text" id="customerName" name="customerName" required>
         </div>
         <div>
-            <label for="phone">Customer phone:</label>
-            <input type="text" id="phone" name="phone" required>
+            <label for="customerPhone">Customer phone:</label>
+            <input type="text" id="customerPhone" name="customerPhone" required>
         </div>
         <div>
             <label for="rowSelect">Row:</label>
