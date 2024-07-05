@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class BookingService {
@@ -77,7 +78,7 @@ public class BookingService {
         return vacantLines;
     }
 
-    public List<Integer> getVacantSeatsForLine(Long lineId) {
+    public List<Integer> getVacantSeatsForLine(Long lineId, Long concertId) {
         Line line = lineRepository.findById(lineId);
         int seatsPerLine = line.getSeatsPerLine();
 
@@ -89,6 +90,7 @@ public class BookingService {
         List<BookedSeat> bookedSeats = bookedSeatRepository.findAllByLineId(lineId);
 
         List<Integer> bookedSeatsOrdinalNumbers = bookedSeats.stream()
+                .filter(bookedSeat -> Objects.equals(bookedSeat.getConcert().getId(), concertId))
                 .map(BookedSeat::getSeatOrdinalNumber)
                 .toList();
 

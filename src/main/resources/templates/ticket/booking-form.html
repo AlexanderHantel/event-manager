@@ -21,7 +21,7 @@
     <p>Hall layout: <pre th:text="${hallLayout}"></pre>
 
     <form th:action="@{/ticket/buyTicket}" method="post">
-        <input type="hidden" th:value="${concertId}" name="concertId" />
+        <input type="hidden" th:value="${concertId}" id="concertId" name="concertId" />
         <div>
             <label for="customerName">Customer name:</label>
             <input type="text" id="customerName" name="customerName" required>
@@ -52,11 +52,12 @@
         $(document).ready(function() {
             $('#rowSelect').change(function() {
                 var rowId = $(this).val();
+                var concertId = $('#concertId').val();
                 if (rowId) {
                     $.ajax({
                         url: '/ticket/getVacantSeats',
                         type: 'GET',
-                        data: { rowId: rowId },
+                        data: { rowId: rowId, concertId: concertId },
                         success: function(data) {
                             $('#seatSelect').empty().append('<option value="">Select a seat</option>');
                             $.each(data, function(index, seat) {
@@ -64,6 +65,9 @@
                             });
                             $('#seatSelect').show();
                             $('label[for="seatSelect"]').show();
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Failed to fetch vacant seats:", error);
                         }
                     });
                 } else {

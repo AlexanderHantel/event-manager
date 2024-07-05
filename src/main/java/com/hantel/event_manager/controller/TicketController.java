@@ -74,8 +74,9 @@ public class TicketController {
 
     @GetMapping("/getVacantSeats")
     @ResponseBody
-    public List<Integer> getVacantSeats(@RequestParam("rowId") Long rowId) {
-        return bookingService.getVacantSeatsForLine(rowId);
+    public List<Integer> getVacantSeats(@RequestParam("rowId") Long rowId,
+                                        @RequestParam("concertId") Long concertId) {
+        return bookingService.getVacantSeatsForLine(rowId, concertId);
     }
 
     @PostMapping("/buyTicket")

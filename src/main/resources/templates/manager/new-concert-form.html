@@ -21,7 +21,7 @@
     <p>Price: <span th:text="${price}"></span></p>
 
     <form th:action="@{/manager/createConcert}" method="post">
-        <input type="hidden" th:value="${musicalId}" name="musicalId" />
+        <input type="hidden" th:value="${musicalId}" id="musicalId" name="musicalId" />
         <div>
             <label for="hall">Hall:</label>
             <select id="hall" name="hall" required>
