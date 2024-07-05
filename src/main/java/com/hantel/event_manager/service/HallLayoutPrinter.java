@@ -4,28 +4,23 @@ import com.hantel.event_manager.entity.hall.BookedSeat;
 import com.hantel.event_manager.entity.hall.Line;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.StringJoiner;
+import java.util.*;
 
 @Component
-public class HallOccupancyPrinter {
-    public static final String VACANT_SEAT_SYMBOL = "--";
-    public static final String BOOKED_SEAT_SYMBOL = "XX";
+public class HallLayoutPrinter {
+    private static final String VACANT_SEAT_SYMBOL = "--";
+    private static final String BOOKED_SEAT_SYMBOL = "XX";
 
-    public String getHallOccupancyTable(List<Line> lines, List<BookedSeat> bookedSeats) {
-        StringJoiner hallOccupancyString = new StringJoiner("\n");
+    public String getHallLayoutTable(List<Line> lines, Long concertId) {
+        StringJoiner hallLayoutString = new StringJoiner("\n");
 
-        hallOccupancyString.add(createHeader(lines));
+        hallLayoutString.add(createHeader(lines));
 
-        for (int i = 1; i <= lines.size(); i++) {
-            int lineIndex = i - 1;
-            Line line = lines.get(lineIndex);
-            hallOccupancyString.add(createRow(i, line, bookedSeats));
+        for (Line line : lines) {
+            hallLayoutString.add(createRow(line, concertId));
         }
 
-        return hallOccupancyString.toString();
+        return hallLayoutString.toString();
     }
 
     private String createHeader(List<Line> lines) {
@@ -47,17 +42,17 @@ public class HallOccupancyPrinter {
         return head.toString();
     }
 
-    private String createRow(int lineOrdinalNumber, Line line, List<BookedSeat> bookedSeats) {
+    private String createRow(Line line, Long concertId) {
         StringJoiner row = new StringJoiner(" ");
-        List<BookedSeat> bookedSeatsForThisRow = bookedSeats.stream()
-                .filter(bookedSeat -> bookedSeat.getLine().getOrdinalNumber() == lineOrdinalNumber)
+        List<BookedSeat> bookedSeats = line.getBookedSeats().stream()
+                .filter(bookedSeat -> Objects.equals(bookedSeat.getConcert().getId(), concertId))
                 .toList();
 
-        row.add(createRowHeader(lineOrdinalNumber));
+        row.add(createRowHeader(line.getOrdinalNumber()));
 
         int lineSize = line.getSeatsPerLine();
 
-        row.add(createSeats(lineSize, bookedSeatsForThisRow));
+        row.add(createSeats(lineSize, bookedSeats));
 
         return row.toString();
     }

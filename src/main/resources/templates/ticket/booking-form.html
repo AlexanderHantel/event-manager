@@ -18,7 +18,7 @@
     <p>Time: <span th:text="${time}"></span></p>
     <p>Hall: <span th:text="${hallName}"></span></p>
     <p>Price: <span th:text="${price}"></span></p>
-    <p>Hall layout: <pre th:text="${hallOccupancy}"></pre>
+    <p>Hall layout: <pre th:text="${hallLayout}"></pre>
 
     <form th:action="@{/ticket/buyTicket}" method="post">
         <div>
@@ -33,7 +33,7 @@
             <label for="rowSelect">Row:</label>
             <select id="rowSelect" name="rowSelect">
                 <option value="">Select a row</option>
-                <option th:each="row : ${vacantRows}" th:value="${row}" th:text="${row}"></option>
+                <option th:each="row : ${vacantRows}" th:value="${row.lineId}" th:text="${row.lineOrdinalNumber}"></option>
             </select>
         </div>
         <div>
@@ -50,12 +50,12 @@
     <script>
         $(document).ready(function() {
             $('#rowSelect').change(function() {
-                var row = $(this).val();
-                if (row) {
+                var rowId = $(this).val();
+                if (rowId) {
                     $.ajax({
                         url: '/ticket/getVacantSeats',
                         type: 'GET',
-                        data: { row: row },
+                        data: { rowId: rowId },
                         success: function(data) {
                             $('#seatSelect').empty().append('<option value="">Select a seat</option>');
                             $.each(data, function(index, seat) {

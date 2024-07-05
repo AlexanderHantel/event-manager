@@ -27,5 +27,5 @@ public class Line {
     private Hall hall;
 
     @OneToMany(mappedBy = "line")
-    private List<BookedSeat> bookedSeat;
+    private List<BookedSeat> bookedSeats;
 }

@@ -57,17 +57,17 @@ public class TicketController {
         model.addAttribute("time", concert.getStartDateTime().toLocalTime());
         model.addAttribute("hallName", concert.getHall().getName());
         model.addAttribute("price", concert.getMusical().getPrice());
-        model.addAttribute("hallOccupancy", bookingService.getHallOccupancy(
+        model.addAttribute("hallLayout", bookingService.getHallLayout(
                 concert.getHall().getId(),
                 concert.getId()));
-        model.addAttribute("vacantRows", List.of(1, 2, 3, 4, 5));
+        model.addAttribute("vacantRows", bookingService.getVacantLines(concertId));
 
         return "ticket/booking-form";
     }
 
     @GetMapping("/getVacantSeats")
     @ResponseBody
-    public List<Integer> getFreeSeats(@RequestParam("row") int row) {
-        return List.of(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    public List<Integer> getVacantSeats(@RequestParam("rowId") Long rowId) {
+        return bookingService.getVacantSeatsForLine(rowId);
     }
 }
