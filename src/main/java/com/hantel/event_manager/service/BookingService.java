@@ -43,7 +43,7 @@ public class BookingService {
         int bookedSeatsAmount = bookedSeatRepository.getBookedSeatsAmountByConcertId(concertId);
         int seatsAmount = hallRepository.getSeatsAmount(hallId);
         int vacantSeatsAmount = seatsAmount - bookedSeatsAmount;
-        if (seatsAmount == 0) {
+        if (vacantSeatsAmount == 0) {
             return "SOLD OUT";
         }
 

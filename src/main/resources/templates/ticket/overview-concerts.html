@@ -22,7 +22,7 @@
             <p><strong>Date:</strong> <span th:text="${concert.date}"></span></p>
             <p><strong>Time:</strong> <span th:text="${concert.time}"></span></p>
             <p><strong>Vacant Seats:</strong> <span th:text="${concert.vacantSeatsAmount}"></span></p>
-            <form th:action="@{/ticket/bookingForm}" method="get">
+            <form th:action="@{/ticket/bookingForm}" method="get" th:if="${concert.vacantSeatsAmount != 'SOLD OUT'}">
                 <div>
                     <input type="hidden" th:value="${concert.concertId}" name="concertId" />
                     <button type="submit">CHOOSE</button>
