@@ -30,10 +30,6 @@ public class HallRepository {
         return entityManager.createQuery(FIND_ALL, Hall.class).getResultList();
     }
 
-    public int getFreeSeatsNumber(Long concertId, Long musicalId) {
-        return 0;
-    }
-
     public int getSeatsAmount(Long hallId) {
         Query query = entityManager.createQuery(GET_SEATS_AMOUNT);
         query.setParameter("hallId", hallId);

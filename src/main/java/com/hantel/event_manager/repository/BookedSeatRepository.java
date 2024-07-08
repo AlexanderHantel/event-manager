@@ -16,7 +16,8 @@ public class BookedSeatRepository {
     private final EntityManager entityManager;
     private static final String COUNT_BOOKED_SEATS =
             "select count(bs) from BookedSeat bs where bs.concert.id = :concertId";
-    private static final String FIND_ALL_BY_LINE_ID = "select s from BookedSeat s where s.line.id = :lineId";
+    private static final String FIND_ALL_BY_LINE_ID_AND_CONCERT_ID =
+            "select s from BookedSeat s where s.line.id = :lineId and s.concert.id = :concertId";
 
     @Autowired
     public BookedSeatRepository(EntityManager entityManager) {
@@ -30,9 +31,11 @@ public class BookedSeatRepository {
         return cuntResult.intValue();
     }
 
-    public List<BookedSeat> findAllByLineId(Long lineId) {
-        TypedQuery<BookedSeat> typedQuery = entityManager.createQuery(FIND_ALL_BY_LINE_ID, BookedSeat.class)
-                .setParameter("lineId", lineId);
+    public List<BookedSeat> findAllByLineIdAndConcertId(Long lineId, Long concertId) {
+        TypedQuery<BookedSeat> typedQuery = entityManager.createQuery(
+                FIND_ALL_BY_LINE_ID_AND_CONCERT_ID, BookedSeat.class)
+                .setParameter("lineId", lineId)
+                .setParameter("concertId", concertId);
         return typedQuery.getResultList();
     }
 

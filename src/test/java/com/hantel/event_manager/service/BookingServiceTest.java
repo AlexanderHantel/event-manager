@@ -1,10 +1,12 @@
 package com.hantel.event_manager.service;
 
+import com.hantel.event_manager.dto.LineTicketControllerDTO;
 import com.hantel.event_manager.entity.Concert;
 import com.hantel.event_manager.entity.hall.BookedSeat;
 import com.hantel.event_manager.entity.hall.Hall;
 import com.hantel.event_manager.entity.hall.Line;
 import com.hantel.event_manager.repository.BookedSeatRepository;
+import com.hantel.event_manager.repository.ConcertRepository;
 import com.hantel.event_manager.repository.HallRepository;
 import com.hantel.event_manager.repository.LineRepository;
 import org.junit.jupiter.api.Test;
@@ -14,9 +16,11 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,6 +29,8 @@ class BookingServiceTest {
     private BookedSeatRepository bookedSeatRepository;
     @Mock
     private HallRepository hallRepository;
+    @Mock
+    private ConcertRepository concertRepository;
     @Mock
     private LineRepository lineRepository;
     @Spy
@@ -160,24 +166,185 @@ class BookingServiceTest {
         Line line = new Line();
         line.setSeatsPerLine(seatsPerLine);
 
+        long concertId = 1L;
+        Concert concert = new Concert();
+        concert.setId(concertId);
+
+        Hall hall = new Hall();
+
         List<BookedSeat> bookedSeats = List.of(
-                new BookedSeat(1L, new Hall(), new Concert(), new Line(), 1, null),
-                new BookedSeat(2L, new Hall(), new Concert(), new Line(), 2, null),
-                new BookedSeat(3L, new Hall(), new Concert(), new Line(), 3, null),
-                new BookedSeat(4L, new Hall(), new Concert(), new Line(), 4, null),
-                new BookedSeat(5L, new Hall(), new Concert(), new Line(), 5, null),
-                new BookedSeat(6L, new Hall(), new Concert(), new Line(), 6, null),
-                new BookedSeat(7L, new Hall(), new Concert(), new Line(), 7, null),
-                new BookedSeat(8L, new Hall(), new Concert(), new Line(), 8, null),
-                new BookedSeat(9L, new Hall(), new Concert(), new Line(), 9, null),
-                new BookedSeat(10L, new Hall(), new Concert(), new Line(), 10, null)
+                new BookedSeat(1L, hall, concert, line, 1, null),
+                new BookedSeat(2L, hall, concert, line, 2, null),
+                new BookedSeat(3L, hall, concert, line, 3, null),
+                new BookedSeat(4L, hall, concert, line, 4, null),
+                new BookedSeat(5L, hall, concert, line, 5, null),
+                new BookedSeat(6L, hall, concert, line, 6, null),
+                new BookedSeat(7L, hall, concert, line, 7, null),
+                new BookedSeat(8L, hall, concert, line, 8, null),
+                new BookedSeat(9L, hall, concert, line, 9, null),
+                new BookedSeat(10L, hall, concert, line, 10, null)
         );
 
         when(lineRepository.findById(lineId)).thenReturn(line);
-        when(bookedSeatRepository.findAllByLineId(lineId)).thenReturn(bookedSeats);
+        when(bookedSeatRepository.findAllByLineIdAndConcertId(lineId, concertId)).thenReturn(bookedSeats);
 
         List<Integer> expectedResult = List.of(11, 12, 13, 14);
 
-        assertEquals(expectedResult, bookingService.getVacantSeatsForLine(lineId));
+        assertEquals(expectedResult, bookingService.getVacantSeatsForLine(lineId, concertId));
+    }
+
+    @Test
+    public void getVacantSeatsAmount_IfConcertIsFullyVacant() {
+        Long concertId = 1L;
+        Long hallId = 1L;
+
+        int seatsAmountInHall = 10;
+        int bookedSeatsAmount = 0;
+        String expectedVacantSeatsAmount = "10";
+
+        when(bookedSeatRepository.getBookedSeatsAmountByConcertId(hallId)).thenReturn(bookedSeatsAmount);
+        when(hallRepository.getSeatsAmount(hallId)).thenReturn(seatsAmountInHall);
+        String actualVacantSeatsAmount = bookingService.getVacantSeatsAmount(concertId, hallId);
+        assertEquals(expectedVacantSeatsAmount, actualVacantSeatsAmount);
+    }
+
+    @Test
+    public void getVacantSeatsAmount_IfConcertIsHalfVacant() {
+        Long concertId = 1L;
+        Long hallId = 1L;
+
+        int seatsAmountInHall = 10;
+        int bookedSeatsAmount = 5;
+        String expectedVacantSeatsAmount = "5";
+
+        when(bookedSeatRepository.getBookedSeatsAmountByConcertId(hallId)).thenReturn(bookedSeatsAmount);
+        when(hallRepository.getSeatsAmount(hallId)).thenReturn(seatsAmountInHall);
+        String actualVacantSeatsAmount = bookingService.getVacantSeatsAmount(concertId, hallId);
+        assertEquals(expectedVacantSeatsAmount, actualVacantSeatsAmount);
+    }
+
+    @Test
+    public void getVacantSeatsAmount_IfHallIsSoldOut() {
+        Long concertId = 1L;
+        Long hallId = 1L;
+
+        int seatsAmountInHall = 10;
+        int bookedSeatsAmount = 10;
+        String expectedVacantSeatsAmount = "SOLD OUT";
+
+        when(bookedSeatRepository.getBookedSeatsAmountByConcertId(hallId)).thenReturn(bookedSeatsAmount);
+        when(hallRepository.getSeatsAmount(hallId)).thenReturn(seatsAmountInHall);
+        String actualVacantSeatsAmount = bookingService.getVacantSeatsAmount(concertId, hallId);
+        assertEquals(expectedVacantSeatsAmount, actualVacantSeatsAmount);
+    }
+
+    @Test
+    public void getVacantLines_IfNoBookedSeats() {
+        Long concertId = 1L;
+        Concert concert = mock(Concert.class);
+        Hall hall = mock(Hall.class);
+
+        List<Line> lines = initializeLines();
+
+        List<BookedSeat> bookedSeats = new ArrayList<>();
+
+        when(concertRepository.findById(concertId)).thenReturn(concert);
+        when(concert.getHall()).thenReturn(hall);
+        when(hall.getLines()).thenReturn(lines);
+        when(concert.getBookedSeats()).thenReturn(bookedSeats);
+
+        List<LineTicketControllerDTO> expectedResult = List.of(
+                new LineTicketControllerDTO(1L, 1),
+                new LineTicketControllerDTO(2L, 2)
+        );
+
+        assertEquals(expectedResult.toString(), bookingService.getVacantLines(concertId).toString());
+    }
+
+    @Test
+    public void getVacantLines_IfOneVacantLine() {
+        Long concertId = 1L;
+        Concert concert = mock(Concert.class);
+        Hall hall = mock(Hall.class);
+
+        List<Line> lines = initializeLines();
+
+        List<BookedSeat> bookedSeats = initializeBookedSeatsForOneBookedLine();
+
+        when(concertRepository.findById(concertId)).thenReturn(concert);
+        when(concert.getHall()).thenReturn(hall);
+        when(hall.getLines()).thenReturn(lines);
+        when(concert.getBookedSeats()).thenReturn(bookedSeats);
+
+        List<LineTicketControllerDTO> expectedResult = List.of(
+                new LineTicketControllerDTO(2L, 2)
+        );
+
+        assertEquals(expectedResult.toString(), bookingService.getVacantLines(concertId).toString());
+    }
+
+    @Test
+    public void getVacantLines_IfSoldOut() {
+        Long concertId = 1L;
+        Concert concert = mock(Concert.class);
+        Hall hall = mock(Hall.class);
+
+        List<Line> lines = initializeLines();
+
+        List<BookedSeat> bookedSeats = initializeBookedSeatsForSoldOutLine();
+
+        when(concertRepository.findById(concertId)).thenReturn(concert);
+        when(concert.getHall()).thenReturn(hall);
+        when(hall.getLines()).thenReturn(lines);
+        when(concert.getBookedSeats()).thenReturn(bookedSeats);
+
+        assertEquals(List.of().toString(), bookingService.getVacantLines(concertId).toString());
+    }
+
+    private List<Line> initializeLines() {
+        Line line1 = new Line();
+        line1.setId(1L);
+        line1.setOrdinalNumber(1);
+        line1.setSeatsPerLine(2);
+        Line line2 = new Line();
+        line2.setId(2L);
+        line2.setOrdinalNumber(2);
+        line2.setSeatsPerLine(2);
+        return List.of(line1, line2);
+    }
+
+    private List<BookedSeat> initializeBookedSeatsForOneBookedLine() {
+        Line line = new Line();
+        line.setOrdinalNumber(1);
+
+        BookedSeat bookedSeat1 = new BookedSeat();
+        bookedSeat1.setLine(line);
+
+        BookedSeat bookedSeat2 = new BookedSeat();
+        bookedSeat2.setLine(line);
+
+        return List.of(bookedSeat1, bookedSeat2);
+    }
+
+    private List<BookedSeat> initializeBookedSeatsForSoldOutLine() {
+        Line line1 = new Line();
+        line1.setOrdinalNumber(1);
+
+        Line line2 = new Line();
+        line2.setOrdinalNumber(2);
+
+        BookedSeat bookedSeat1Line1 = new BookedSeat();
+        bookedSeat1Line1.setLine(line1);
+
+        BookedSeat bookedSeat2Line1 = new BookedSeat();
+        bookedSeat2Line1.setLine(line1);
+
+        BookedSeat bookedSeat1Line2 = new BookedSeat();
+        bookedSeat1Line2.setLine(line2);
+
+        BookedSeat bookedSeat2Line2 = new BookedSeat();
+        bookedSeat2Line2.setLine(line2);
+
+        return List.of(bookedSeat1Line1, bookedSeat2Line1, bookedSeat1Line2, bookedSeat2Line2);
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Component
 public class BookingService {
@@ -87,10 +86,9 @@ public class BookingService {
             vacantSeats.add(i + 1);
         }
 
-        List<BookedSeat> bookedSeats = bookedSeatRepository.findAllByLineId(lineId);
+        List<BookedSeat> bookedSeats = bookedSeatRepository.findAllByLineIdAndConcertId(lineId, concertId);
 
         List<Integer> bookedSeatsOrdinalNumbers = bookedSeats.stream()
-                .filter(bookedSeat -> Objects.equals(bookedSeat.getConcert().getId(), concertId))
                 .map(BookedSeat::getSeatOrdinalNumber)
                 .toList();
 

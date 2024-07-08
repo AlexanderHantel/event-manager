@@ -1,14 +1,12 @@
 package com.hantel.event_manager.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class LineTicketControllerDTO {
     private Long lineId;
     private int lineOrdinalNumber;
