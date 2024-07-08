@@ -17,6 +17,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Cacheable
 public class Concert {
 
     @Id

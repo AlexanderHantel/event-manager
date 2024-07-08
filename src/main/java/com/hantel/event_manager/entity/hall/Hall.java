@@ -15,6 +15,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Cacheable
 public class Hall {
 
     @Id

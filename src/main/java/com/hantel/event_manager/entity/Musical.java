@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Cacheable
 public class Musical {
 
     @Id
@@ -26,8 +27,4 @@ public class Musical {
 
     @OneToMany(mappedBy = "musical")
     private List<Concert> concerts = new ArrayList<>();
-
-    public void addConcert(Concert concert) {
-        concerts.add(concert);
-    }
 }
