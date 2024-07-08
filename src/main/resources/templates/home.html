@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap">
+    <style>
+        body {
+            font-family: 'Source Code Pro', monospace;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>WELCOME</h1>
+    <h1>please choose a system:</h1>
+    <div class="button-container">
+        <form th:action="@{/ticket}" method="get">
+            <div>
+                <button type="submit">TICKET SERVICE</button>
+            </div>
+        </form>
+        <form th:action="@{/manager}" method="get">
+            <div>
+                <button type="submit">MANAGEMENT SYSTEM</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

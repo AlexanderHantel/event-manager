@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket is booked</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap">
+    <style>
+        body {
+            font-family: 'Source Code Pro', monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ticket is successfully booked:</h1>
+    <p>Customer name: <span th:text="${customerName}"></span></p>
+    <p>Customer phone: <span th:text="${customerPhone}"></span></p>
+    <p>Date: <span th:text="${date}"></span></p>
+    <p>Time: <span th:text="${time}"></span></p>
+    <p>Hall: <span th:text="${hall}"></span></p>
+    <p>Price: <span th:text="${price}"></span></p>
+    <p>Row: <span th:text="${row}"></span></p>
+    <p>Seat: <span th:text="${seat}"></span></p>
+    <p>Hall layout: <pre th:text="${hallLayout}"></pre>
+
+    <form th:action="@{/}" method="get">
+        <div>
+            <button type="submit">HOME</button>
+        </div>
+    </form>
+</body>
+</html>

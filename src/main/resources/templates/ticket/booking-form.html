@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket booking</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: 'Source Code Pro', monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ticket booking:</h1>
+    <p>Musical name: <span th:text="${musicalName}"></span></p>
+    <p>Date: <span th:text="${date}"></span></p>
+    <p>Time: <span th:text="${time}"></span></p>
+    <p>Hall: <span th:text="${hallName}"></span></p>
+    <p>Price: <span th:text="${price}"></span></p>
+    <p>Hall layout: <pre th:text="${hallLayout}"></pre>
+
+    <form th:action="@{/ticket/buyTicket}" method="post">
+        <input type="hidden" th:value="${concertId}" id="concertId" name="concertId" />
+        <div>
+            <label for="customerName">Customer name:</label>
+            <input type="text" id="customerName" name="customerName" required>
+        </div>
+        <div>
+            <label for="customerPhone">Customer phone:</label>
+            <input type="text" id="customerPhone" name="customerPhone" required>
+        </div>
+        <div>
+            <label for="rowSelect">Row:</label>
+            <select id="rowSelect" name="rowSelect">
+                <option value="">Select a row</option>
+                <option th:each="row : ${vacantRows}" th:value="${row.lineId}" th:text="${row.lineOrdinalNumber}"></option>
+            </select>
+        </div>
+        <div>
+            <label for="seatSelect" style="display:none;">Seat:</label>
+            <select id="seatSelect" name="seatSelect" style="display:none;">
+                <option value="">Select a seat</option>
+            </select>
+        </div>
+        <div>
+            <button type="submit">BOOK THE TICKET</button>
+        </div>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            $('#rowSelect').change(function() {
+                var rowId = $(this).val();
+                var concertId = $('#concertId').val();
+                if (rowId) {
+                    $.ajax({
+                        url: '/ticket/getVacantSeats',
+                        type: 'GET',
+                        data: { rowId: rowId, concertId: concertId },
+                        success: function(data) {
+                            $('#seatSelect').empty().append('<option value="">Select a seat</option>');
+                            $.each(data, function(index, seat) {
+                                $('#seatSelect').append('<option value="' + seat + '">' + seat + '</option>');
+                            });
+                            $('#seatSelect').show();
+                            $('label[for="seatSelect"]').show();
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Failed to fetch vacant seats:", error);
+                        }
+                    });
+                } else {
+                    $('#seatSelect').hide();
+                    $('label[for="seatSelect"]').hide();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
