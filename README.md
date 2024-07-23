@@ -16,6 +16,8 @@ This project was highlighted by the course mentor and selected as an example of 
 - **JPA (Java Persistence API)**: For object-relational mapping.
 - **Hibernate**: As the JPA implementation.
 - **H2DB**: In-memory database for storing data.
+- **JCache**: As an abstraction for Second Level Caching.
+- **EhCache**: As the implementation for JCache.
 - **Thymeleaf**: For server-side rendering of HTML.
 
 ## Installation
