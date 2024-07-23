@@ -24,7 +24,7 @@ This project was highlighted by the course mentor and selected as an example of 
 
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/AlexanderHantel/event-manager.git
+    git clone https://github.com/AlexanderHantel/event-manager-jpa.git
     cd event-manager
     ```
 
